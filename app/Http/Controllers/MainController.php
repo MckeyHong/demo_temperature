@@ -38,9 +38,10 @@ class MainController extends Controller
      */
     public function index()
     {
-        $info = $this->mainServices->listHome();
+        $info = $this->mainServices->listHome(request()->input('date', ''));
         return view('index', [
             'title' => ''.config('adminlte.title'),
+            'get'   => $info['get'],
             'list'  => $info['list'],
             'date'  => $info['date'],
         ]);
@@ -57,7 +58,7 @@ class MainController extends Controller
 
     public function fan()
     {
-        $info = $this->mainServices->listFan(request()->input('start', ''), request()->input('end', ''), request()->input('status', ''));
+        $info = $this->mainServices->listFan(request()->input('start', ''), request()->input('end', ''), request()->input('status', 'all'));
         return view('fan', [
             'title' => '風扇控制紀錄 - '.config('adminlte.title'),
             'list'  => $info['list'],

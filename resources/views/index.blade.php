@@ -9,7 +9,22 @@
 @stop
 
 @section('content')
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<section class="content">
+    <div class="row">
+        <div class="box">
+            <div style="padding:10px;">
+                <form id="search-form" method="get">
+                    日期：<select name="date" onchange="$('#search-form').submit();">
+                        @for($day = 0 ; $day <= 6 ; $day++)
+                        <option value="{{date('Y-m-d', strtotime($date['now']. " - ".$day." days"))}}" @if($get == date('Y-m-d', strtotime($date['now']. " - ".$day." days"))) selected @endif>{{date('Y-m-d', strtotime($date['now']. " - ".$day." days"))}}</option>
+                        @endfor
+                    </select>
+                </form>
+            </div>
+            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>
+    </div>
+</section>
 @stop
 
 @section('css')
@@ -55,7 +70,7 @@ $(function () {
             }
         },
         series: [{
-            name: '室內溫度',
+            name: '室內溫度(小時)',
             data: [{{$list}}]
         }]
     });

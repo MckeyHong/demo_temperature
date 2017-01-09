@@ -23,15 +23,20 @@ class MainServices
      *
      * @return array
      */
-    public function listHome()
+    public function listHome($date)
     {
         try {
             $temperature = $result = [];
             for($no = 0 ; $no <=23 ; $no ++) {
                 $result[] = 0;
             }
-            $now = Carbon::now();
-            $nowDate = $now->year.'-'.sprintf('%02d', $now->month).'-'.sprintf('%02d', $now->day);
+            if ($date == '') {
+                $now = Carbon::now();
+                $nowDate = $now->year.'-'.sprintf('%02d', $now->month).'-'.sprintf('%02d', $now->day);
+            } else {
+                $now = Carbon::parse($date);
+                $nowDate = $date;
+            }
             $temp = $this->temperatureRepository->listHome($nowDate.' 00:00:00', $nowDate.' 23:59:59');
             if ($temp->count()) {
                 foreach ($temp as $info) {
@@ -59,7 +64,8 @@ class MainServices
             return [
                 'result' => true,
                 'list'   => implode(',', $result),
-                'date'   => ['y' => $now->year, 'm' => ($now->month-1), 'd' => $now->day, 'date' => $nowDate],
+                'get'    => $nowDate,
+                'date'   => ['y' => $now->year, 'm' => ($now->month-1), 'd' => $now->day, 'date' => $nowDate, 'now' => substr(Carbon::now()->toDateTimeString(), 0, 10)],
             ];
         } catch (\Exception $e) {
             // 其他錯誤

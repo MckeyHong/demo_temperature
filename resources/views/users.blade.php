@@ -209,7 +209,7 @@ $(function (){
                     if (response.result == true) {
                         location.reload();
                     } else {
-                        alert('請確認資料是否填寫正確');
+                        swal("新增錯誤", "請確認資料是否填寫正確", "error");
                         return false;
                     }
                 }
@@ -230,7 +230,7 @@ $(function (){
                     if (response.result == true) {
                         location.reload();
                     } else {
-                        alert('請確認資料是否填寫正確');
+                        swal("更新錯誤", "請確認資料是否填寫正確", "error");
                         return false;
                     }
                 }

@@ -21,6 +21,9 @@ php artisan key:generate
 php artisan migrate
 php artisan db:seed
 
+// 安裝樣版
+php artisan vendor:publish --provider="JeroenNoten\LaravelAdminLte\ServiceProvider" --tag=assets
+
 // 本機運作
 php -S localhost:1988 -t public
 

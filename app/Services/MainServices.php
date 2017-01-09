@@ -26,20 +26,40 @@ class MainServices
     public function listHome()
     {
         try {
-            $temperature = [];
-            $time = Carbon::yesterday();
-            $startTime = $time->toDateTimeString();
-            $endTime = str_replace('00:00:00', '23:59:59', $startTime);
-            $temp = $this->temperatureRepository->listHome($startTime, $endTime);
+            $temperature = $result = [];
+            for($no = 0 ; $no <=23 ; $no ++) {
+                $result[] = 0;
+            }
+            $now = Carbon::now();
+            $nowDate = $now->year.'-'.sprintf('%02d', $now->month).'-'.sprintf('%02d', $now->day);
+            $temp = $this->temperatureRepository->listHome($nowDate.' 00:00:00', $nowDate.' 23:59:59');
             if ($temp->count()) {
                 foreach ($temp as $info) {
-                    $temperature[] = $info['value'];
+                    $hour = substr($info['time'], 11, 2);
+                    if (!isset($temperature[$hour])) {
+                        $temperature[$hour] = ['cnt' => 0, 'temperature' => 0];
+                    }
+                    $temperature[$hour]['cnt'] += 1;
+                    $temperature[$hour]['temperature'] += $info['value'];
                 }
+
+                foreach ($temperature as $key => $hour) {
+                    $temperature[$key]['sum'] = round($hour['temperature']/$hour['cnt'], 1);
+                }
+
+                for ($no = 0 ; $no < 23 ; $no++) {
+                    $no = sprintf('%02d', $no);
+                    if (isset($temperature[$no])) {
+                        $result[$no] = $temperature[$no]['sum'];
+                    }
+                }
+
             }
+
             return [
                 'result' => true,
-                'list'   => implode(',', $temperature),
-                'date'   => ['y' => $time->year, 'm' => ($time->month-1), 'd' => $time->day, 'date' => $time->year.'-'.$time->month.'-'.$time->day],
+                'list'   => implode(',', $result),
+                'date'   => ['y' => $now->year, 'm' => ($now->month-1), 'd' => $now->day, 'date' => $nowDate],
             ];
         } catch (\Exception $e) {
             // 其他錯誤

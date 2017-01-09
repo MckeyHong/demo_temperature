@@ -78,13 +78,21 @@ class MainServices
      *
      * @return mixed
      */
-    public function listTemperature()
+    public function listTemperature($start, $end)
     {
         try {
+            if ($start == '' || $end == '') {
+                $time = Carbon::today();
+                $start = $time->toDateTimeString();
+                $end = str_replace('00:00:00', '23:59:59', $start);
+            }
             return [
                 'result' => true,
+                'get'    => ['start' => $start, 'end' => $end],
                 'list'   => $this->temperatureRepository->listTemperature([
-                'paginate' => config('website.paginate'),
+                    'start'    => $start,
+                    'end'      => $end,
+                    'paginate' => config('website.paginate'),
             ])];
         } catch (\Exception $e) {
             // 其他錯誤

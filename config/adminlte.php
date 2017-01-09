@@ -119,10 +119,15 @@ return [
             'icon' => 'user',
         ],
         [
-            'text' => '風扇控制紀錄',
-            'url'  => '/fan',
+            'text' => '室內溫度記錄',
+            'url'  => '/temperature',
             'icon' => 'flag',
         ],
+        // [
+        //     'text' => '風扇控制紀錄',
+        //     'url'  => '/fan',
+        //     'icon' => 'flag',
+        // ],
     ],
 
     /*

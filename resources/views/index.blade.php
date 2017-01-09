@@ -66,7 +66,14 @@ $(function () {
         plotOptions: {
              series:{
                 pointStart:Date.UTC({{$date['y']}}, {{$date['m']}},{{$date['d']}}),
-                pointInterval: 3600 * 1000
+                pointInterval: 3600 * 1000,
+                cursor: 'pointer',
+                events: {
+                    click: function (event) {
+                        console.log(event.point.index);
+                        console.log(event.point.y);
+                    }
+                }
             }
         },
         series: [{

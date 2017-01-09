@@ -50,9 +50,11 @@ class MainController extends Controller
 
     public function temperature()
     {
+        $info = $this->mainServices->listTemperature(request()->input('start', ''), request()->input('end', ''));
         return view('temperature', [
-            'title' => '室內溫度紀錄 - '.config('adminlte.title'),
-            'list'  => $this->mainServices->listTemperature()['list'],
+            'title' => '室內溫度記錄 - '.config('adminlte.title'),
+            'list'  => $info['list'],
+            'get'   => $info['get'],
         ]);
     }
 

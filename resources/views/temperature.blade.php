@@ -5,17 +5,86 @@
 @section('title', $title)
 
 @section('content_header')
-    <h1>室內溫度紀錄</h1>
+    <h1>室內溫度記錄</h1>
 @stop
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <div class="row" style="margin-bottom: 10px;line-height: 32px;">
+                <div class="col-sm-12">
+                    <form method="get">
+                <div class="pull-left">時間：</div>
+                <div class="input-group date pull-left" id="startPicker">
+                    <input type="text" class="form-control" name="start" data-date-format="YYYY-MM-DD HH:mm:ss" value="{{$get['start']}}"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <div class="pull-left" style="line-height: 32px;margin:0 5px;"> ~ </div>
+                <div class="input-group date pull-left" id="endPicker">
+                    <input type="text" class="form-control" name="end" data-date-format="YYYY-MM-DD HH:mm:ss" value="{{$get['end']}}" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <div class="pull-left" style="margin-left:5px;">
+                        <button type="submit" class="btn btn-sm btn-info"><i class="fa fa-search"></i> 搜尋</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row"><div class="col-sm-12"><table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+            <thead>
+                <tr>
+                    <th class="text-center">時間</th>
+                    <th class="text-center">溫度</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($list as $fan)
+                <tr>
+                    <td class="text-center">{{$fan['time']}}</td>
+                    <td class="text-center">{{$fan['value']}}</td>
+                </tr>
+                @endforeach
+                @if ($list->total() == 0)
+                <tr>
+                    <td colspan="２" class="text-center">無資料</td>
+                </tr>
+                @endif
+            </tbody>
+            </table></div></div></div>
+                <div class="clearfix"></div>
+                <div class="row pull-right page-block">
+                    @if ($list->total() > 0)
+                    {{ $list->links() }}
+                    @endif
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</section>
 @stop
 
 @section('css')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.44/css/bootstrap-datetimepicker.min.css" />
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.44/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $('#startPicker, #endPicker').datetimepicker();
+            });
+        </script>
 @stop

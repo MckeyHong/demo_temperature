@@ -27,7 +27,8 @@ class TemperatureRepository
      */
     public function listTemperature($request)
     {
-        return $this->temperature->orderby('time', 'DESC')->paginate($request['paginate']);
+        return $this->temperature->whereBetween('time', [$request['start'], $request['end']])
+                                 ->orderby('time', 'DESC')->paginate($request['paginate']);
     }
 
     /**

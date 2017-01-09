@@ -39,8 +39,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $info = $this->usersServices->listUsers(request()->input('username', ''), request()->input('active', ''), request()->input('role', ''));
+        $info = $this->usersServices->listUsers(request()->input('email', ''), request()->input('active', ''));
         return view('users', [
+            'title'  => '使用者 - '.config('adminlte.title'),
             'get'    => $info['get'],
             'list'   => $info['list'],
             'cate'   => config('website.noticesCate'),
@@ -58,11 +59,10 @@ class UsersController extends Controller
     {
         // 驗證參數
         $validator = Validator::make(request()->all(), [
-            'username' => 'required|alpha_num|between:4,8|unique:users,username',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|confirmed|between:6,12',
-            'fullname' => 'required',
-            'active'   => 'required|alpha_num:'.implode(',', array_keys(config('website.usersActive'))),
-            'role'     => 'required|alpha_num:'.implode(',', array_keys(config('website.usersRole'))),
+            'name'     => 'required',
+            'active'   => 'required|alpha_num:1,2',
         ], $this->errorMessage);
         if ($validator->fails()) {
             $result = ['result' => false, 'code' => config('errorCode.validateFail'), 'msg' => $validator->errors()->first()];
@@ -86,9 +86,8 @@ class UsersController extends Controller
         $request['userID'] = $userID;
         $validator = Validator::make($request, [
             'password' => 'confirmed|between:6,12',
-            'fullname' => 'required',
-            'active'   => 'required|alpha_num:'.implode(',', array_keys(config('website.usersActive'))),
-            'role'     => 'required|alpha_num:'.implode(',', array_keys(config('website.usersRole'))),
+            'name'     => 'required',
+            'active'   => 'required|alpha_num:1,2',
             'userID'   => 'required|exists:users,id',
         ], $this->errorMessage);
         if ($validator->fails()) {

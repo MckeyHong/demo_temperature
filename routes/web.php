@@ -18,6 +18,8 @@ Route::group(['middleware' => 'checkLogin'], function () {
     Route::post('changePassword', 'UsersController@changePassword');
 
     // 首頁
+    Route::get('/fan', 'MainController@fan');
+    Route::get('/temperature', 'MainController@temperature');
     Route::get('/', 'MainController@index');
 });
 

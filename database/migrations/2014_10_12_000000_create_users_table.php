@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->unsignedTinyInteger('active')->default(1)->comment('帳號狀態(1:啟用,2:停用)');
             $table->rememberToken();
             $table->timestamps();
         });

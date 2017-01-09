@@ -22,8 +22,6 @@ class UsersServices
 
     /** @var UsersRepository 使用者Repository */
     private $usersRepository;
-    /** @var SessionsRepository Sessions Repository */
-    private $sessionsRepository;
 
     public function __construct(UsersRepository $usersRepository)
     {
@@ -33,22 +31,20 @@ class UsersServices
     /**
      * 使用者 - 清單資料
      *
-     * @param string   $fullname
+     * @param string   $email
      * @param integer  $active
-     * @param integer  $role
      *
      * @return array
      */
-    public function listUsers($username, $active, $role)
+    public function listUsers($email, $active)
     {
         try {
             return [
                 'result' => true,
-                'get'    => ['username' => $username, 'active' => $active, 'role' => $role],
+                'get'    => ['email' => $email, 'active' => $active],
                 'list'   => $this->usersRepository->listUsers([
-                'username' => $username,
+                'email'    => $email,
                 'active'   => $active,
-                'role'     => $role,
                 'paginate' => config('website.paginate'),
             ])];
         } catch (\Exception $e) {
@@ -88,38 +84,13 @@ class UsersServices
     {
         try {
             $update = [
-                'fullname' => $request['fullname'],
-                'active'   => $request['active'],
-                'role'     => $request['role'],
+                'name'   => $request['name'],
+                'active' => $request['active'],
             ];
             if (isset($request['password']) && $request['password'] != '') {
                 $update['password'] = Hash::make($request['password']);
             }
-            if ($request['active'] == '2') {
-                $this->sessionsRepository->deleteSessions($userID);
-            }
             return ['result' => $this->usersRepository->updateUsers($userID, $update)];
-        } catch (\Exception $e) {
-            // 其他錯誤
-            return ['result' => self::ERROR, 'code' => ($e->getCode() ? $e->getCode() : config('errorCode.otherError')), 'msg' => $e->getMessage()];
-        }
-    }
-
-    /**
-     * 使用者 - 更新帳號狀態
-     *
-     * @param integer $userID
-     * @param integer $active
-     *
-     * @return array
-     */
-    public function activeUsers($userID, $active)
-    {
-        try {
-            if ($active == '2') {
-                $this->sessionsRepository->deleteSessions($userID);
-            }
-            return ['result' => $this->usersRepository->updateUsersActive($userID, $active)];
         } catch (\Exception $e) {
             // 其他錯誤
             return ['result' => self::ERROR, 'code' => ($e->getCode() ? $e->getCode() : config('errorCode.otherError')), 'msg' => $e->getMessage()];
@@ -136,7 +107,6 @@ class UsersServices
     public function deleteUsers($userID)
     {
         try {
-            $this->sessionsRepository->deleteSessions($userID);
             return ['result' => $this->usersRepository->deleteUsers($userID)];
         } catch (\Exception $e) {
             // 其他錯誤

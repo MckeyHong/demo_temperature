@@ -40,6 +40,26 @@ class MainController extends Controller
     {
         $info = $this->mainServices->listHome();
         return view('index', [
+            'title' => ''.config('adminlte.title'),
+            'list'  => $info['list'],
+            'date'  => $info['date'],
+        ]);
+    }
+
+
+    public function temperature()
+    {
+        return view('temperature', [
+            'title' => '室內溫度紀錄 - '.config('adminlte.title'),
+            'list'  => $this->mainServices->listTemperature()['list'],
+        ]);
+    }
+
+    public function fan()
+    {
+        return view('fan', [
+            'title' => '風扇控制紀錄 - '.config('adminlte.title'),
+            'list'  => $this->mainServices->listFan()['list'],
         ]);
     }
 }

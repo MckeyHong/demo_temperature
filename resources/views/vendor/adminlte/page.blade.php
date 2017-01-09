@@ -3,6 +3,11 @@
 @section('adminlte_css')
     <link rel="stylesheet"
           href="{{ asset('vendor/adminlte/dist/css/skins/skin-' . config('adminlte.skin', 'blue') . '.min.css')}} ">
+    <style>
+        .page-block {
+            margin-right: 0px;
+        }
+    </style>
     @stack('css')
     @yield('css')
 @stop
@@ -131,6 +136,14 @@
 @stop
 
 @section('adminlte_js')
+    <script>
+        var url = '{{Request::root()}}';
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
     <script src="{{ asset('vendor/adminlte/dist/js/app.min.js') }}"></script>
     @stack('js')
     @yield('js')

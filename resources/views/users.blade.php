@@ -69,7 +69,7 @@
                 <div class="clearfix"></div>
                 <div class="row pull-right page-block">
                     @if ($list->total() > 0)
-                    {{ $list->links() }}
+                    {{ $list->appends(['email' => $get['email'], 'active' => $get['active']])->links() }}
                     @endif
                 </div>
                 <div class="clearfix"></div>

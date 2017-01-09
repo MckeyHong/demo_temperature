@@ -63,7 +63,7 @@
                 <div class="clearfix"></div>
                 <div class="row pull-right page-block">
                     @if ($list->total() > 0)
-                    {{ $list->links() }}
+                    {{ $list->appends(['start' => $get['start'], 'end' => $get['end']])->links() }}
                     @endif
                 </div>
                 <div class="clearfix"></div>

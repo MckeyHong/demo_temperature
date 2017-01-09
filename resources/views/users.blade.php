@@ -59,6 +59,11 @@
                     </td>
                 </tr>
                 @endforeach
+                @if ($list->total() == 0)
+                <tr>
+                    <td colspan="5" class="text-center">無資料</td>
+                </tr>
+                @endif
             </tbody>
             </table></div></div></div>
                 <div class="clearfix"></div>

@@ -71,13 +71,22 @@ class MainServices
      *
      * @return mixed
      */
-    public function listFan()
+    public function listFan($start, $end, $status)
     {
         try {
+            if ($start == '' || $end == '') {
+                $time = Carbon::today();
+                $start = $time->toDateTimeString();
+                $end = str_replace('00:00:00', '23:59:59', $start);
+            }
             return [
                 'result' => true,
+                'get'    => ['start' => $start, 'end' => $end, 'status' => $status],
                 'list'   => $this->temperatureStatusRepository->listTemperatureStatus([
-                'paginate' => config('website.paginate'),
+                    'start'    => $start,
+                    'end'      => $end,
+                    'paginate' => config('website.paginate'),
+                    'status'   => $status
             ])];
         } catch (\Exception $e) {
             // 其他錯誤

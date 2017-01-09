@@ -126,14 +126,14 @@ class UsersServices
         try {
             $user = $this->usersRepository->checkEmail($request['email']);
             if ($user->count() == 0) {
-                throw new \Exception('email does not exist');
+                throw new \Exception('找不到此帳號');
             }
             $user = $user[0];
             if (!Hash::check($request['password'], $user->password)) {
-                throw new \Exception('password is error');
+                throw new \Exception('密碼錯誤');
             }
             if ($user->active != 1) {
-                throw new \Exception('email was disabled');
+                throw new \Exception('此帳號停用中');
             }
             session()->put([
                 'user_id'    => $user->id,

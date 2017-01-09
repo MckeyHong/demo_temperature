@@ -22,7 +22,11 @@ class TemperatureStatusRepository
      */
     public function listTemperatureStatus($request)
     {
-        return $this->temperatureStatus->orderby('time', 'DESC')->paginate($request['paginate']);
+        $obj = $this->temperatureStatus->whereBetween('time', [$request['start'], $request['end']]);
+        if(isset($request['status']) && $request['status'] != 'all') {
+            $obj = $obj->where('status', $request['status']);
+        }
+        return $obj->orderby('time', 'DESC')->paginate($request['paginate']);
     }
 
     /**

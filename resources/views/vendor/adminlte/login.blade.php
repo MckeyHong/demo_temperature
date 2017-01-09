@@ -3,6 +3,7 @@
 @section('adminlte_css')
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/iCheck/square/blue.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/css/auth.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
     @yield('css')
 @stop
 
@@ -49,6 +50,7 @@
 @stop
 
 @section('adminlte_js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
     <script src="{{ asset('vendor/adminlte/plugins/iCheck/icheck.min.js') }}"></script>
     <script>
         var url = '{{Request::root()}}';
@@ -67,7 +69,17 @@
                     dataType: 'json',
                     data: $(this).serialize(),
                     success: function (response) {
-                        location.reload();
+                        if (response.result == true) {
+                            location.reload();
+                        } else {
+                            // sweetAlert("登入錯誤", response.error.message, "error");
+                            return false;
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        var err = eval("(" + jqXHR.responseText + ")");
+                        sweetAlert("登入錯誤", err.error.message, "error");
+                        return false;
                     }
                 });
             });

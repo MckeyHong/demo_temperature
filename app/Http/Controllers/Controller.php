@@ -29,7 +29,7 @@ class Controller extends BaseController
         $errorCode = $result['code'] ?? config('errorCode.otherError');
         $message = $result['msg'] ?? '';
 
-        if ($data !== self::ERROR) {
+        if ($data !== self::ERROR && $errorCode != '400002') {
             $statusCode = 200;
             $responseData = ['result' => $data];
         } else {

@@ -27,7 +27,7 @@ class MainServices
     {
         try {
             $temperature = $result = [];
-            for($no = 0 ; $no <=23 ; $no ++) {
+            for($no = 0 ; $no < 23 ; $no ++) {
                 $result[] = 0;
             }
             if ($date == '') {

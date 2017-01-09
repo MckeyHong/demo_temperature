@@ -16,7 +16,7 @@
         <!-- /.login-logo -->
         <div class="login-box-body">
             <p class="login-box-msg">{{ trans('adminlte::adminlte.login_message') }}</p>
-            <form action="{{ url(config('adminlte.login_url', 'login')) }}" method="post">
+            <form id="login-form" method="post">
                 {!! csrf_field() !!}
 
                 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
@@ -40,32 +40,9 @@
                     @endif
                 </div>
                 <div class="row">
-                    <div class="col-xs-8">
-                        <div class="checkbox icheck">
-                            <label>
-                                <input type="checkbox" name="remember"> {{ trans('adminlte::adminlte.remember_me') }}
-                            </label>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-xs-4">
-                        <button type="submit"
-                                class="btn btn-primary btn-block btn-flat">{{ trans('adminlte::adminlte.sign_in') }}</button>
-                    </div>
-                    <!-- /.col -->
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">{{ trans('adminlte::adminlte.sign_in') }}</button>
                 </div>
             </form>
-            <div class="auth-links">
-                <a href="{{ url(config('adminlte.password_reset_url', 'password/reset')) }}"
-                   class="text-center"
-                >{{ trans('adminlte::adminlte.i_forgot_my_password') }}</a>
-                <br>
-                @if (config('adminlte.register_url', 'register'))
-                    <a href="{{ url(config('adminlte.register_url', 'register')) }}"
-                       class="text-center"
-                    >{{ trans('adminlte::adminlte.register_a_new_membership') }}</a>
-                @endif
-            </div>
         </div>
         <!-- /.login-box-body -->
     </div><!-- /.login-box -->
@@ -74,12 +51,27 @@
 @section('adminlte_js')
     <script src="{{ asset('vendor/adminlte/plugins/iCheck/icheck.min.js') }}"></script>
     <script>
+        var url = '{{Request::root()}}';
         $(function () {
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
+
+            $('#login-form').submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    url: url + '/login',
+                    type: 'post',
+                    dataType: 'json',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            });
+
         });
     </script>
     @yield('js')

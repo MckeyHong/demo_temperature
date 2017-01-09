@@ -40,10 +40,6 @@ class MainController extends Controller
     {
         $info = $this->mainServices->listHome();
         return view('index', [
-            'get'    => $info['get'],
-            'list'   => $info['list'],
-            'showID' => intval(request()->noticesID),
-            'cate'   => config('website.noticesCate'),
         ]);
     }
 }
